@@ -70,3 +70,23 @@ test("centralizes the Nuvemshop integration and keeps required assets", async ()
     access(new URL("../public/campaign/linha-pronta/feminino-azul-corrida.webp", import.meta.url)),
   ]);
 });
+
+
+test("keeps CI and Cloudflare deployment portable", async () => {
+  const [deployScript, workflow, packageJson] = await Promise.all([
+    readFile(new URL("../deploy-cloudflare.ps1", import.meta.url), "utf8"),
+    readFile(new URL("../.github/workflows/ci.yml", import.meta.url), "utf8"),
+    readFile(new URL("../package.json", import.meta.url), "utf8"),
+  ]);
+
+  assert.doesNotMatch(deployScript, /\$drive\s*=\s*["']R:/i);
+  assert.match(deployScript, /foreach \(\$letterCode in 90\.\.68\)/);
+  assert.match(deployScript, /\$mappedByScript/);
+  assert.match(deployScript, /"compatibility_date": "2026-07-30"/);
+  assert.match(workflow, /pull_request:/);
+  assert.match(workflow, /branches:\s*\n\s*- main/);
+  assert.match(workflow, /run: npm ci/);
+  assert.match(workflow, /run: npm run lint/);
+  assert.match(workflow, /run: npm test/);
+  assert.match(packageJson, /--ignore-pattern \.cloudflare-publish/);
+});
