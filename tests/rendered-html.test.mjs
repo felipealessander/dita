@@ -50,6 +50,8 @@ test("centralizes the Nuvemshop integration and keeps required assets", async ()
   assert.match(page, /NEXT_PUBLIC_DITA_STORE_URL/);
   assert.match(page, /function storeUrl/);
   assert.match(page, /utm_content/);
+  assert.match(page, /logo-dita-symbol\.jpeg/);
+  assert.match(layout, /logo-dita-symbol\.jpeg/);
   assert.match(page, /search\/\?q=hybrid/i);
   assert.match(page, /search\/\?q=triathlon/i);
   assert.match(layout, /Ditá — Performance em cada movimento/);
@@ -59,5 +61,6 @@ test("centralizes the Nuvemshop integration and keeps required assets", async ()
     access(new URL("../public/collection/hybrid-lime-lookbook.png", import.meta.url)),
     access(new URL("../public/collection/tri-red-product.png", import.meta.url)),
     access(new URL("../public/og.png", import.meta.url)),
+    access(new URL("../public/logo-dita-symbol.jpeg", import.meta.url)),
   ]);
 });

@@ -5,7 +5,7 @@ export const metadata: Metadata = {
   metadataBase: new URL("https://usedita.com.br"),
   title: "Ditá — Performance em cada movimento",
   description: "Moda esportiva brasileira para atletas de Triathlon, Hybrid e todos os dias em movimento.",
-  icons: { icon: "/favicon.svg" },
+  icons: { icon: "/logo-dita-symbol.jpeg", apple: "/logo-dita-symbol.jpeg" },
   openGraph: {
     title: "Ditá — Performance em cada movimento",
     description: "Triathlon, Hybrid e performance para todos os dias em movimento.",
