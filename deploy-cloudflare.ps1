@@ -8,7 +8,7 @@ $releaseClient = Join-Path $releaseRoot "client"
 $wranglerConfigPath = Join-Path $releaseServer "wrangler.json"
 $wrangler = Join-Path $projectRoot "node_modules\.bin\wrangler.cmd"
 $npm = "npm.cmd"
-$drive = "R:"
+$subst = "$env:SystemRoot\System32\subst.exe"
 
 if (-not (Test-Path -LiteralPath $wrangler)) {
   throw "Wrangler nao encontrado. Execute npm install antes de publicar."
@@ -52,7 +52,7 @@ $wranglerConfig = @'
 {
   "name": "dita-performance-2026",
   "main": "index.js",
-  "compatibility_date": "2026-05-15",
+  "compatibility_date": "2026-07-30",
   "compatibility_flags": ["nodejs_compat"],
   "no_bundle": true,
   "rules": [
@@ -73,15 +73,26 @@ $wranglerConfig = @'
 $utf8NoBom = New-Object System.Text.UTF8Encoding($false)
 [System.IO.File]::WriteAllText($wranglerConfigPath, $wranglerConfig, $utf8NoBom)
 
-$existingMapping = (& "$env:SystemRoot\System32\subst.exe") |
-  Where-Object { $_ -like "$drive*" }
-
-if ($existingMapping) {
-  & "$env:SystemRoot\System32\subst.exe" $drive /D | Out-Null
+$drive = $null
+foreach ($letterCode in 90..68) {
+  $candidate = "{0}:" -f [char]$letterCode
+  if (-not (Test-Path -LiteralPath "$candidate\")) {
+    $drive = $candidate
+    break
+  }
 }
 
+if (-not $drive) {
+  throw "Nenhuma letra de unidade livre foi encontrada para preparar a publicacao."
+}
+
+$mappedByScript = $false
 try {
-  & "$env:SystemRoot\System32\subst.exe" $drive $releaseRoot
+  & $subst $drive $releaseRoot
+  if ($LASTEXITCODE -ne 0) {
+    throw "Nao foi possivel criar a unidade temporaria $drive."
+  }
+  $mappedByScript = $true
   $env:WRANGLER_LOG_PATH = "$drive\wrangler.log"
 
   Push-Location "$drive\server"
@@ -99,7 +110,9 @@ try {
   }
 }
 finally {
-  & "$env:SystemRoot\System32\subst.exe" $drive /D | Out-Null
+  if ($mappedByScript) {
+    & $subst $drive /D | Out-Null
+  }
 }
 
 Write-Host ""
