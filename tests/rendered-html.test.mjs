@@ -34,6 +34,8 @@ test("server-renders the Ditá commercial site", async () => {
   assert.match(html, /Marca para atletas/);
   assert.match(html, /Produtos em/);
   assert.match(html, /Vista sua/);
+  assert.match(html, /Peças já produzidas/);
+  assert.match(html, /A performance/);
   assert.match(html, /Comprar agora/);
   assert.match(html, /usedita2\.lojavirtualnuvem\.com\.br/);
   assert.match(html, /utm_source=site_dita/);
@@ -62,5 +64,9 @@ test("centralizes the Nuvemshop integration and keeps required assets", async ()
     access(new URL("../public/collection/tri-red-product.png", import.meta.url)),
     access(new URL("../public/og.png", import.meta.url)),
     access(new URL("../public/logo-dita-symbol.jpeg", import.meta.url)),
+    access(new URL("../public/campaign/linha-pronta/masculino-preto-hybrid.webp", import.meta.url)),
+    access(new URL("../public/campaign/linha-pronta/masculino-azul-corrida.webp", import.meta.url)),
+    access(new URL("../public/campaign/linha-pronta/feminino-bordo-hybrid.webp", import.meta.url)),
+    access(new URL("../public/campaign/linha-pronta/feminino-azul-corrida.webp", import.meta.url)),
   ]);
 });
