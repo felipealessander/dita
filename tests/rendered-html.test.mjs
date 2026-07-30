@@ -31,7 +31,9 @@ test("server-renders the Ditá commercial site", async () => {
   const html = await response.text();
   assert.match(html, /<title>Ditá — Performance em cada movimento<\/title>/i);
   assert.match(html, /Performance em cada movimento/);
-  assert.match(html, /Loja oficial Ditá/);
+  assert.match(html, /Marca para atletas/);
+  assert.match(html, /Produtos em/);
+  assert.match(html, /Vista sua/);
   assert.match(html, /Comprar agora/);
   assert.match(html, /usedita2\.lojavirtualnuvem\.com\.br/);
   assert.match(html, /utm_source=site_dita/);
@@ -46,10 +48,10 @@ test("centralizes the Nuvemshop integration and keeps required assets", async ()
   ]);
 
   assert.match(page, /NEXT_PUBLIC_DITA_STORE_URL/);
-  assert.match(page, /const storeUrl/);
+  assert.match(page, /function storeUrl/);
   assert.match(page, /utm_content/);
-  assert.match(page, /produtos\/\?q=Hybrid/);
-  assert.match(page, /produtos\/\?q=Triathlon/);
+  assert.match(page, /search\/\?q=hybrid/i);
+  assert.match(page, /search\/\?q=triathlon/i);
   assert.match(layout, /Ditá — Performance em cada movimento/);
 
   await Promise.all([
